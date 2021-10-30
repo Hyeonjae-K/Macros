@@ -1,13 +1,19 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
 
-time_driver = webdriver.Chrome()
-driver = webdriver.Chrome()
 my_id = 'id'
 my_pw = 'pw'
 purchase_time = ['10시', '00분', '00초']
 url = 'url'
 options = ['op1', 'op2']
+
+options = Options()
+user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'
+options.add_argument('headless')
+options.add_argument('user-agent=%s' % user_agent)
+time_driver = webdriver.Chrome()
+driver = webdriver.Chrome()
 
 
 def login():

@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 import pyautogui as pag
 import numpy as np
 from mss import mss
@@ -17,8 +18,11 @@ cash_bill_none = [1500, 480]
 next_btn = [1350, 980]
 purchase_time = ['10시', '00분', '00초']
 
+options = Options()
+user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'
+options.add_argument('headless')
+options.add_argument('user-agent=%s' % user_agent)
 driver = webdriver.Chrome()
-driver.set_window_position(-2000, 0)
 driver.get('https://time.navyism.com/?host=store.musinsa.com')
 
 
