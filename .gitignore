@@ -2,3 +2,4 @@ run.sh
 rank.csv
 chromedriver.exe
 __pycache__/
+.idea/
