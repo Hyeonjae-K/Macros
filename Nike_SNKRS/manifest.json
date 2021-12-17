@@ -1,0 +1,23 @@
+{
+  "name": "Nike SNKRS",
+  "description": "나이키 스니커즈 매크로",
+  "version": "1.0",
+  "manifest_version": 3,
+
+  "background": {
+    "service_worker": "background.js"
+  },
+  
+  "action": {
+    "default_popup": "popup.html"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"]
+    }
+  ],
+
+  "permissions": ["activeTab"]
+}
