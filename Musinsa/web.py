@@ -5,8 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 
-my_id = 'id'
-my_pw = 'pw'
+
 purchase_time = ['10시', '00분', '00초']
 url = 'url'
 user_agent = 'user-agent'
@@ -20,18 +19,6 @@ time_driver = webdriver.Chrome(chrome_options=ops)
 
 driver = webdriver.Chrome()
 wait = WebDriverWait(driver, 10)
-
-
-def login():
-    driver.get(
-        'https://my.musinsa.com/login/v1/login?referer=https%3A%2F%2Fstore.musinsa.com%2Fapp%2F')
-    wait.until(EC.presence_of_element_located(
-        (By.CSS_SELECTOR, 'body > div.musinsa-wrapper.wrapper-member.devicePC > div.n-member-area > form > input:nth-child(5)'))).send_keys(my_id)
-    driver.find_element(
-        By.CSS_SELECTOR, 'body > div.musinsa-wrapper.wrapper-member.devicePC > div.n-member-area > form > input:nth-child(6)').send_keys(my_pw)
-    driver.find_element(
-        By.CSS_SELECTOR, 'body > div.musinsa-wrapper.wrapper-member.devicePC > div.n-member-area > form > button').click()
-    driver.get(url)
 
 
 def checkTime():
@@ -71,6 +58,5 @@ def purchase():
     driver.find_element_by_css_selector('#spayNext').click
 
 
-login()
 checkTime()
 purchase()
