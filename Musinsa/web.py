@@ -11,28 +11,27 @@ url = 'url'
 user_agent = 'user-agent'
 options = ['op1', 'op2']
 
-ops = Options()
-ops.add_argument('headless')
-ops.add_argument('window-size=1920x1080')
-ops.add_argument('user-agent=%s' % user_agent)
-time_driver = webdriver.Chrome(chrome_options=ops)
-
 driver = webdriver.Chrome()
 wait = WebDriverWait(driver, 10)
 
 
 def checkTime():
+    chrome_options = Options()
+    chrome_options.add_argument('headless')
+    chrome_options.add_argument('user-agent=%s' % user_agent)
+    time_driver = webdriver.Chrome(chrome_options=chrome_options)
+    alarm_box = '#navyismMainContainer > div:nth-child(15) > div:nth-child(1) > div:nth-child(1) > label:nth-child(2)'
+    time_area = '#time_area'
+
     time_driver.get('https://time.navyism.com/?host=store.musinsa.com')
-    wait.until(EC.presence_of_element_located(
-        (By.CSS_SELECTOR, '#navyismMainContainer > div:nth-child(15) > div:nth-child(1) > div:nth-child(1) > label:nth-child(2)'))).click()
-    time_driver.find_element(
-        By.CSS_SELECTOR, '#navyismMainContainer > div:nth-child(15) > div:nth-child(1) > div:nth-child(2) > label:nth-child(4)').click()
+    time_driver.find_element(By.CSS_SELECTOR, alarm_box).click()
+
     while True:
         server_time = time_driver.find_element(
-            By.CSS_SELECTOR, '#time_area').text.split()[3:]
-        if server_time == purchase_time:
+            By.CSS_SELECTOR, time_area).text.split()[3:]
+        if purchase_time == server_time:
             driver.get(url)
-            break
+            return
 
 
 def purchase():
