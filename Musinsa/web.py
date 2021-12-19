@@ -1,7 +1,6 @@
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 
@@ -24,7 +23,7 @@ def checkTime():
     time_area = '#time_area'
 
     time_driver.get('https://time.navyism.com/?host=store.musinsa.com')
-    time_driver.find_element(By.CSS_SELECTOR, alarm_box).click()
+    time_driver.find_element(By.CSS_SELECTOR, alarm_box).click()  # 정각 알람 비활성화
 
     while True:
         server_time = time_driver.find_element(
@@ -43,6 +42,7 @@ def purchase():
     next_btn = '#spayNext'
     bill_btn = '#frmObj > div.content > div.con > div:nth-child(5) > div.chk_box.chk_cash.ma_t20 > label'
 
+    # 옵션 선택창
     driver.get(url)
     for idx, option in enumerate(options):
         item_options = driver.find_elements(
@@ -53,10 +53,12 @@ def purchase():
                 break
     driver.find_element(By.CSS_SELECTOR, buy_btn).click()
 
+    # 주문 정보창
     wait.until(EC.presence_of_element_located(
         (By.CSS_SELECTOR, agree_all1))).click()
     driver.find_element(By.CSS_SELECTOR, pay_btn).click()
 
+    # 가상계좌 결제 요청창
     driver.switch_to.frame(wait.until(
         EC.presence_of_element_located((By.CSS_SELECTOR, frame_id))))
     wait.until(EC.presence_of_element_located(
