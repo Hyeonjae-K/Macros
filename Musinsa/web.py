@@ -6,9 +6,9 @@ from selenium.webdriver.common.by import By
 from selenium import webdriver
 
 
-purchase_time = ['10시', '00분', '00초']
-url = 'url'
-user_agent = 'user-agent'
+purchase_time = ['00시', '00분', '00초']
+url = 'URL'
+user_agent = 'User_Agent'
 options = ['op1', 'op2']
 
 driver = webdriver.Chrome()
@@ -30,31 +30,42 @@ def checkTime():
         server_time = time_driver.find_element(
             By.CSS_SELECTOR, time_area).text.split()[3:]
         if purchase_time == server_time:
-            driver.get(url)
             return
 
 
 def purchase():
-    for i in range(len(options)):
-        ops = wait.until(EC.presence_of_element_located(
-            (By.CSS_SELECTOR, '#option%d > option' % (i+1))))
-        for op in ops:
-            if options[i] in op.text:
-                op.click()
+    option_tag = '#option%d > option'
+    buy_btn = '#product_order_info > div.explan_product.option_select_section.opt-select-box > div.box-btn-buy.wrap-btn-buy > div.btn_buy > a'
+    agree_all1 = '#payment_info_area > ul:nth-child(9) > li.cell_discount_detail.last > p:nth-child(1) > label > span'
+    pay_btn = '#btn_pay'
+    frame_id = '#naxIfr'
+    agree_all2 = '#frmObj > div.content > div.con > div.agree_new.form_row > div.agree_chk_bg > div.chk_box.chk_agree_all > label'
+    next_btn = '#spayNext'
+    bill_btn = '#frmObj > div.content > div.con > div:nth-child(5) > div.chk_box.chk_cash.ma_t20 > label'
+
+    driver.get(url)
+    for idx, option in enumerate(options):
+        item_options = driver.find_elements(
+            By.CSS_SELECTOR, option_tag % (idx+1))
+        for item_option in item_options:
+            if option in item_option.text:
+                item_option.click()
                 break
-    driver.find_element(
-        By.CSS_SELECTOR, '#product_order_info > div.explan_product.option_select_section.opt-select-box > div.box-btn-buy.wrap-btn-buy > div.btn_buy > a').send_keys(Keys.ENTER)
+    driver.find_element(By.CSS_SELECTOR, buy_btn).click()
+
     wait.until(EC.presence_of_element_located(
-        (By.CSS_SELECTOR, '#payment_info_area > ul:nth-child(9) > li.cell_discount_detail.last > p:nth-child(1) > label > span'))).click()
-    driver.find_element(By.CSS_SELECTOR, '#btn_pay').send_keys(Keys.ENTER)
+        (By.CSS_SELECTOR, agree_all1))).click()
+    driver.find_element(By.CSS_SELECTOR, pay_btn).click()
+
     driver.switch_to.frame(wait.until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, '#naxIfr'))))
+        EC.presence_of_element_located((By.CSS_SELECTOR, frame_id))))
     wait.until(EC.presence_of_element_located(
-        (By.CSS_SELECTOR, '#frmObj > div.content > div.con > div.agree_new.form_row > div.agree_chk_bg > div.chk_box.chk_agree_all > label'))).click()
-    driver.find_element(By.CSS_SELECTOR, '#spayNext').click()
+        (By.CSS_SELECTOR, agree_all2))).click()
+    driver.find_element(By.CSS_SELECTOR, next_btn).click()
+
     wait.until(EC.presence_of_element_located(
-        (By.CSS_SELECTOR, '#frmObj > div.content > div.con > div:nth-child(5) > div.chk_box.chk_cash.ma_t20 > label'))).click()
-    driver.find_element_by_css_selector('#spayNext').click
+        (By.CSS_SELECTOR, bill_btn))).click()
+    driver.find_element(By.CSS_SELECTOR, next_btn).click()
 
 
 checkTime()
