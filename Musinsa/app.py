@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import pyautogui as pag
 import numpy as np
@@ -17,21 +18,24 @@ cash_bill_option = {'left': 1340, 'top': 560, 'width': 1865, 'height': 605}
 cash_bill_none = [1500, 480]
 next_btn = [1350, 980]
 purchase_time = ['10시', '00분', '00초']
-
-options = Options()
-user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'
-options.add_argument('headless')
-options.add_argument('user-agent=%s' % user_agent)
-driver = webdriver.Chrome()
-driver.get('https://time.navyism.com/?host=store.musinsa.com')
+user_agent = 'User-Agent'
 
 
 def checkTime():
+    chrome_options = Options()
+    chrome_options.add_argument('headless')
+    chrome_options.add_argument('user-agent=%s' % user_agent)
+    time_driver = webdriver.Chrome(chrome_options=chrome_options)
+    alarm_box = '#navyismMainContainer > div:nth-child(15) > div:nth-child(1) > div:nth-child(1) > label:nth-child(2)'
+    time_area = '#time_area'
+
+    time_driver.get('https://time.navyism.com/?host=store.musinsa.com')
+    time_driver.find_element(By.CSS_SELECTOR, alarm_box).click()
     while True:
-        server_time = driver.find_element_by_css_selector(
-            '#time_area').text.split()[3:]
-        if server_time == purchase_time:
-            break
+        server_time = time_driver.find_element(
+            By.CSS_SELECTOR, time_area).text.split()[3:]
+        if purchase_time == server_time:
+            return
 
 
 def getColor(location):
@@ -111,5 +115,3 @@ while True:
         break
 click(cash_bill_none)
 click(next_btn)
-
-driver.close()
