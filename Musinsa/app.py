@@ -16,6 +16,7 @@ bill_opt_area = {'left': 2600, 'top': 560, 'width': 3120, 'height': 600}
 bill_opt_btn = (2800, 580)
 bill_non_btn = (2800, 480)
 user_agent = 'User-Agent'
+DEBUG = False
 
 
 def checkTime():
@@ -66,6 +67,18 @@ def purchase():
             pag.click()
             break
 
+
+if DEBUG:
+    import time
+    while True:
+        print()
+        print('Mouse Position:', pag.position())
+        print('buy_area:', np.mean(np.array(mss().grab(buy_area))[:, :, :3]))
+        print('agree2_area:', np.mean(
+            np.array(mss().grab(agree2_area))[:, :, :3]))
+        print('bill_opt_area:', np.mean(
+            np.array(mss().grab(bill_opt_area))[:, :, :3]))
+        time.sleep(1)
 
 checkTime()
 purchase()
