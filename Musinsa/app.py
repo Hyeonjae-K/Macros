@@ -33,16 +33,20 @@ def checkTime():
         server_time = time_driver.find_element(
             By.CSS_SELECTOR, time_area).text.split()[3:]
         if purchase_time == server_time:
+            pag.moveTo(item_btn)
+            pag.click()
             return
 
 
 def purchase():
+    # 상세 페이지
     pag.moveTo(buy_btn)
     while True:
         if 1.4 < np.mean(np.array(mss().grab(buy_area))[:, :, :3]) < 1.5:
             pag.click(clicks=2)
             break
 
+    # 주문 페이지
     while True:
         if 1.6 < np.mean(np.array(mss().grab(buy_area))[:, :, :3]) < 1.7:
             pag.click()
@@ -52,6 +56,7 @@ def purchase():
             pag.click()
             break
 
+    # 결제 페이지
     pag.moveTo(agree2_btn)
     while True:
         if 2.1 < np.mean(np.array(mss().grab(agree2_area))[:, :, :3]) < 2.2:
@@ -69,6 +74,10 @@ def purchase():
 
 
 if DEBUG:
+    '''
+    DEBUG가 True일 경우 1초마다
+    마우스의 좌표, 지정 영역의 이미지 평균값 출력
+    '''
     import time
     while True:
         print()
