@@ -1,23 +1,20 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium import webdriver
 import pyautogui as pag
-import numpy as np
 from mss import mss
-import time
+import numpy as np
 
-first_like = [1400, 300]
-purchase1 = {'left': 1400, 'top': 980, 'width': 1880, 'height': 1030}
-choose_option = {'left': 1330, 'top': 815, 'width': 1875, 'height': 880}
-purchase1_btn = [1700, 1000]
-purchase2 = {'left': 1325, 'top': 975, 'width': 1510, 'height': 1030}
-purchase3 = {'left': 1640, 'top': 975, 'width': 1880, 'height': 1030}
-agree_all1 = {'left': 1335, 'top': 810, 'width': 1465, 'height': 835}
-agree_all2 = {'left': 1780, 'top': 310, 'width': 1865, 'height': 330}
-cash_bill_option = {'left': 1340, 'top': 560, 'width': 1865, 'height': 605}
-cash_bill_none = [1500, 480]
-next_btn = [1350, 980]
-purchase_time = ['10시', '00분', '00초']
+purchase_time = ['00시', '00분', '00초']
+item_btn = (2700, 400)
+buy_area = {'left': 2700, 'top': 985, 'width': 3100, 'height': 1020}
+buy_btn = (3000, 1000)
+agree1_btn = (2610, 840)
+agree2_area = {'left': 3040, 'top': 310, 'width': 3060, 'height': 3030}
+agree2_btn = (3050, 320)
+bill_opt_area = {'left': 2600, 'top': 560, 'width': 3120, 'height': 600}
+bill_opt_btn = (2800, 580)
+bill_non_btn = (2800, 480)
 user_agent = 'User-Agent'
 
 
@@ -38,80 +35,37 @@ def checkTime():
             return
 
 
-def getColor(location):
-    img = np.array(mss().grab(location))[:, :, :3]
-    return np.mean(img)
-
-
-def click(location):
-    if type(location) == type(dict()):
-        x = (location['left'] + location['width']) // 2
-        y = (location['top'] + location['height']) // 2
-    else:
-        x = location[0]
-        y = location[1]
-    pag.moveTo(x=x, y=y, duration=0.0)
-    pag.mouseDown()
-    pag.mouseUp()
-
-
-def checkLocation():
+def purchase():
+    pag.moveTo(buy_btn)
     while True:
-        x, y = pag.position()
-        print('X:', x, 'Y:', y)
-        time.sleep(1)
+        if 1.4 < np.mean(np.array(mss().grab(buy_area))[:, :, :3]) < 1.5:
+            pag.click(clicks=2)
+            break
 
-
-def checkColor(location):
-    color = 0
     while True:
-        temp = getColor(location)
-        if temp != color:
-            color = temp
-            print(color)
+        if 1.6 < np.mean(np.array(mss().grab(buy_area))[:, :, :3]) < 1.7:
+            pag.click()
+            pag.moveTo(agree1_btn)
+            pag.click()
+            pag.moveTo(buy_btn)
+            pag.click()
+            break
+
+    pag.moveTo(agree2_btn)
+    while True:
+        if 2.1 < np.mean(np.array(mss().grab(agree2_area))[:, :, :3]) < 2.2:
+            pag.click()
+            pag.moveTo(bill_opt_btn)
+            break
+    while True:
+        if 32.2 < np.mean(np.array(mss().grab(bill_opt_area))[:, :, :3]) < 32.3:
+            pag.click()
+            pag.moveTo(bill_non_btn)
+            pag.click()
+            pag.moveTo(buy_btn)
+            pag.click()
+            break
 
 
 checkTime()
-click(first_like)
-
-while True:
-    if 3 < getColor(purchase1) < 3.5:
-        click(purchase1)
-        break
-
-while True:
-    if 29.5 < getColor(choose_option) < 30:
-        click(choose_option)
-        break
-pag.scroll(-150)
-time.sleep(0.1)
-click(choose_option)
-click(purchase1_btn)
-
-while True:
-    if 4.5 < getColor(purchase2) < 5:
-        click(purchase2)
-        break
-
-while True:
-    if 33 < getColor(agree_all1) < 33.5:
-        click(agree_all1)
-        break
-click(purchase2)
-
-while True:
-    if 142 < getColor(agree_all2) < 142.5:
-        click(agree_all2)
-        break
-
-while True:
-    if 142 < getColor(agree_all2) < 142.5:
-        click(agree_all2)
-        break
-
-while True:
-    if 118 < getColor(cash_bill_option) < 119:
-        click(cash_bill_option)
-        break
-click(cash_bill_none)
-click(next_btn)
+purchase()
