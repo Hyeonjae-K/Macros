@@ -8,7 +8,7 @@ from selenium import webdriver
 purchase_time = ['00시', '00분', '00초']
 url = 'URL'
 user_agent = 'User_Agent'
-options = ['op1', 'op2']
+options = []
 
 driver = webdriver.Chrome()
 wait = WebDriverWait(driver, 10)
@@ -70,5 +70,6 @@ def purchase():
     driver.find_element(By.CSS_SELECTOR, next_btn).click()
 
 
+driver.get('https://store.musinsa.com/app/')
 checkTime()
 purchase()
